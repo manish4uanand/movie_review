@@ -44,6 +44,10 @@ group :development do
   gem 'spring'
 end
 
+gem 'pry'
+gem 'pry-nav'
+gem 'pry-rails'
+
 gem 'devise', '~> 4.4'
 gem 'paperclip', '~> 5.1'
 gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
