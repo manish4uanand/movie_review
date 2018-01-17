@@ -1,8 +1,10 @@
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-4">
-        <%= image_tag @movie.image.url(:medium) %>
+      <div class="col-md-5">
+        <div class="thumbnail">
+          <%= image_tag @movie.image.url(:medium) %>          
+        </div>
         <div class="star-rating" data-score="<%= @avg_review %>"></div>
         <em><%= "#{@reviews.length} reviews" %></em>
         
@@ -31,33 +33,45 @@
               </tr>
             </tbody>
           </table>
-          <%= link_to "Write Review", new_movie_review_path(@movie) %>
         </div>        
       </div>
-      <div class="col-md-7 col-md-offset-1">
+      <div class="col-md-7">
         <h1 class="review-title"><%= @movie.title %></h1>
         <p><%= @movie.description %></p>
 
         <% if @reviews.blank? %>
           <h3>No reviews yet, would you like to add first!</h3>
-          <%= link_to "Write Review", new_movie_review_path(@movie), class: "btn btn-danger" %>
+          <%#= link_to "Write Review", new_movie_review_path(@movie), class: "btn btn-danger" %>
         <% else %>
           <% @reviews.each do |review| %>
             <div class="reviews">
               <div class="star-rating" data-score="<%= review.rating %>"></div>
               <p><%= review.comment %></p>
+              <div><small>Revied by: <%= review.user.email %></small></div>
             </div>
           <% end %>
         <% end %>
+        <div class="write-review">
+          <% if !current_user.reviews.map{|m| m.movie_id}.include? @movie.id %>
+            <%= link_to "Write Review", new_movie_review_path(@movie), class: "btn btn-danger" %>
+          <% end %>
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <%= link_to 'Back', movies_path, class: "btn btn-default" %> 
+    <div class="btn-group">
+      <%= link_to 'Edit', edit_movie_path(@movie), class: "btn btn-primary" %>
+      <% if @movie.user == current_user %>
+        <%= link_to 'Delete', movie_path(@movie), method: :delete, class: "btn btn-danger" %> 
+      <% end %>
     </div>
   </div>
 </div>
 
 
 
-<%= link_to 'Edit', edit_movie_path(@movie) %> |
-<%= link_to 'Back', movies_path %>
 
 <script type="text/javascript">
   $('.star-rating').raty({
